@@ -5,6 +5,8 @@ UART_TX---FPGA
 
 This project is a VHDL-based UART (Universal Asynchronous Receiver-Transmitter) transmitter designed to send serial data at a specific baud rate. The design includes both the implementation of the UART transmitter and a corresponding test bench for functional verification. 
 
+![UART TX SIMULATION](uart_rx_protocol.png)
+
 The transmitter follows the UART protocol, which includes:
 - **1 Start Bit**: Marks the beginning of data transmission.
 - **8 Data Bits**: The actual payload data.
@@ -57,8 +59,9 @@ During the `TX_DATA` state:
 2. Compile both `TX_UART` and `tb_TX_UART`.
 3. Run the test bench (`tb_TX_UART`) to verify the transmitter functionality.
 4. Observe the waveforms in the simulator.
-
-![UART TX SUMILATION](UART_TX---FPGA/Ekran görüntüsü 2025-01-26 204925.png)
+![UART TX SIMULATION](vivado1.png)
+![UART TX SIMULATION](vivado2.png)
+![UART TX SUMILATION](vivado3.png)
 
 
 ### Expected Output

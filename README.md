@@ -56,13 +56,16 @@ The test bench sends a sequence of bytes (0x51, 0xA3, 0xFF, 0x12) through the UA
 
 
 Configuration Parameters
-The TX_UART module is configurable via generic parameters:
+## Configuration Parameters
 
-Parameter	Description	Default Value
-CLOCK_FREQ	Clock frequency of the FPGA	100_000_000 (100 MHz)
-BAUD_RATE	Transmission baud rate	115_200 (115200 bps)
-Stop_bit_time	Stop bit duration (number of bits)	2
-Usage
+The `TX_UART` module is configurable via generic parameters:
+
+| Parameter       | Description                          | Default Value       |
+|------------------|--------------------------------------|---------------------|
+| `CLOCK_FREQ`     | Clock frequency of the FPGA         | `100_000_000` (100 MHz) |
+| `BAUD_RATE`      | Transmission baud rate              | `115_200` (115200 bps)   |
+| `Stop_bit_time`  | Stop bit duration (number of bits)  | `2`                 |
+
 1. Include in Your Project
 Add the TX_UART module to your VHDL project.
 Connect the input signals:

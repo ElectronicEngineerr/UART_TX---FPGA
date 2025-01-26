@@ -58,7 +58,7 @@ During the `TX_DATA` state:
 3. Run the test bench (`tb_TX_UART`) to verify the transmitter functionality.
 4. Observe the waveforms in the simulator.
 
-![UART TX SUMILATION](Ekran görüntüsü 2025-01-26 204925.png)
+![UART TX SUMILATION](UART_TX---FPGA/Ekran görüntüsü 2025-01-26 204925.png)
 
 
 ### Expected Output

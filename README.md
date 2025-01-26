@@ -58,6 +58,9 @@ During the `TX_DATA` state:
 3. Run the test bench (`tb_TX_UART`) to verify the transmitter functionality.
 4. Observe the waveforms in the simulator.
 
+![UART Protocol Diagram](Ekran görüntüsü 2025-01-26 204925.png)
+
+
 ### Expected Output
 The test bench sends a sequence of bytes (`0x51`, `0xA3`, `0xFF`, `0x12`) through the UART transmitter. The simulation should match the expected UART protocol waveform:
 

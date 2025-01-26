@@ -2,7 +2,7 @@ UART_TX---FPGA
 1. TX_IDLE
 This is the default state where the transmitter remains idle until a start signal (tx_start_in) is received.
 
-vhdl
+```vhdl
 Kopyala
 Düzenle
 when TX_IDLE => 					
@@ -14,7 +14,9 @@ when TX_IDLE =>
         state 		<= TX_START; -- Transition to TX_START
         tx_output   <= '0';     -- Start bit
         shifter_reg <= tx_data_in; -- Load input data to the shift register
-    end if;
+    end if; ```
+
+
 2. TX_START
 In this state, the start bit is transmitted to indicate the beginning of data transmission.
 

@@ -1,74 +1,74 @@
 UART_TX---FPGA
-1. TX_IDLE
-This is the default state where the transmitter remains idle until a start signal (tx_start_in) is received.
+UART Transmitter - VHDL Implementation
+Overview
+This project is a VHDL-based UART (Universal Asynchronous Receiver-Transmitter) transmitter designed to send serial data at a specific baud rate. The design includes both the implementation of the UART transmitter and a corresponding test bench for functional verification.
 
-```vhdl
-Kopyala
-Düzenle
-when TX_IDLE => 					
-    tx_output 	 <= '1';         -- Line is idle (high state)
-    tx_done_tick <= '0';         -- Transmission not complete
-    data_bit_counter <= 0;       -- Bit counter reset
+The transmitter follows the UART protocol, which includes:
 
-    if (tx_start_in = '1') then
-        state 		<= TX_START; -- Transition to TX_START
-        tx_output   <= '0';     -- Start bit
-        shifter_reg <= tx_data_in; -- Load input data to the shift register
-    end if; ```
+1 Start Bit: Marks the beginning of data transmission.
+8 Data Bits: The actual payload data.
+1 Optional Parity Bit: (Currently not implemented but can be extended).
+2 Stop Bits: Marks the end of the transmission.
+
+Features
+Customizable Baud Rate: Configure the transmitter for various baud rates.
+Stop Bits: The design uses 2 stop bits for synchronization.
+Generic Clock Support: Configurable for different FPGA clock frequencies.
+Test Bench Included: A detailed test bench validates the transmitter.
+Files and Structure
+1. Main UART Transmitter (TX_UART)
+The TX_UART module implements the UART transmitter logic. It includes:
+
+State machine (TX_IDLE, TX_START, TX_DATA, TX_STOP) for UART operations.
+Shift register to send bits serially.
+Configurable parameters for clock frequency, baud rate, and stop bit time.
+2. Test Bench (tb_TX_UART)
+The test bench is designed to simulate and verify the transmitter functionality:
+
+It sends multiple data values sequentially.
+The transmitted data is validated against expected timing and output.
+How It Works
+1. Finite State Machine (FSM)
+The transmitter operates in the following states:
+
+TX_IDLE: Waits for a tx_start_in signal to begin transmission.
+TX_START: Sends the start bit (0).
+TX_DATA: Serially shifts and transmits 8 data bits.
+TX_STOP: Sends the stop bits (1).
+2. Shift Register Operation
+During the TX_DATA state:
+
+Data bits are shifted out one by one, starting from the least significant bit (LSB).
+The process is synchronized to the clock and baud rate.
+
+3. Timing Diagram
+The following waveform shows the complete transmission of a byte, including start, data, and stop bits:
 
 
-2. TX_START
-In this state, the start bit is transmitted to indicate the beginning of data transmission.
+Simulation and Testing
+Running the Simulation
+Open the project in Vivado or your preferred VHDL simulator.
+Compile both TX_UART and tb_TX_UART.
+Run the test bench (tb_TX_UART) to verify the transmitter functionality.
+Observe the waveforms in the simulator.
+Expected Output
+The test bench sends a sequence of bytes (0x51, 0xA3, 0xFF, 0x12) through the UART transmitter. The simulation should match the expected UART protocol waveform:
 
-vhdl
-Kopyala
-Düzenle
-when TX_START =>
-    if (clock_per_counter = clock_per_bit - 1) then
-        state 		<= TX_DATA;              -- Transition to TX_DATA
-        tx_output 	<= shifter_reg(0);       -- Send LSB of the data
-        shifter_reg <= '0' & shifter_reg(7 downto 1); -- Shift the register
-        clock_per_counter <= 0;              -- Reset counter
-    else
-        clock_per_counter <= clock_per_counter + 1; -- Increment counter
-    end if;
-3. TX_DATA
-In this state, the 8 bits of data are transmitted sequentially, one bit at a time.
 
-vhdl
-Kopyala
-Düzenle
-when TX_DATA =>
-    if (data_bit_counter = 7) then
-        if (clock_per_counter = clock_per_bit - 1) then
-            state <= TX_STOP;                -- Transition to TX_STOP
-            clock_per_counter <= 0;          -- Reset counter
-            data_bit_counter <= 0;           -- Reset bit counter
-            tx_output <= '1';                -- Stop bit
-        else
-            clock_per_counter <= clock_per_counter + 1; -- Increment counter
-        end if;								
-    else									
-        if (clock_per_counter = clock_per_bit -1) then
-            shifter_reg <= '0' & shifter_reg(7 downto 1); -- Shift register
-            tx_output 	<= shifter_reg(0);   -- Send current bit
-            clock_per_counter <= 0;          -- Reset counter
-            data_bit_counter <= data_bit_counter + 1; -- Increment bit counter
-        else
-            clock_per_counter <= clock_per_counter + 1; -- Increment counter
-        end if;											
-    end if;
-4. TX_STOP
-In this state, the stop bit(s) are transmitted to signal the end of the data frame.
+Configuration Parameters
+The TX_UART module is configurable via generic parameters:
 
-vhdl
-Kopyala
-Düzenle
-when TX_STOP => 				
-    if (clock_per_counter = stop_limit - 1) then
-        state 		 <= TX_IDLE; -- Transition to TX_IDLE
-        tx_done_tick <= '1';     -- Indicate transmission complete
-        clock_per_counter <= 0;  -- Reset counter
-    else
-        clock_per_counter <= clock_per_counter + 1; -- Increment counter
-    end if;
+Parameter	Description	Default Value
+CLOCK_FREQ	Clock frequency of the FPGA	100_000_000 (100 MHz)
+BAUD_RATE	Transmission baud rate	115_200 (115200 bps)
+Stop_bit_time	Stop bit duration (number of bits)	2
+Usage
+1. Include in Your Project
+Add the TX_UART module to your VHDL project.
+Connect the input signals:
+clk: System clock.
+tx_start_in: Signal to start data transmission.
+tx_data_in: 8-bit data to be transmitted.
+2. Simulation
+Use the test bench (tb_TX_UART) to verify functionality.
+Modify tx_data_in and observe the tx_output waveform.
